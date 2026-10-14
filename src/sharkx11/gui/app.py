@@ -199,11 +199,10 @@ class App(DeviceSync, tk.Tk):
     def button(self, parent, text, cmd):
         return Pill(parent, text, self.s, cmd=cmd, fill=TILE_HI, padx=14, pady=6)
 
-    def card(self, parent, title=None):
+    def card(self, parent, title):
         c, inner = panel(parent, self.s)
         c.pack(fill="x", pady=(0, int(10 * self.s)))
-        if title:
-            tk.Label(inner, text=title, bg=TILE, fg=FG, font=theme.font(11, "bold")).pack(anchor="w", pady=(0, int(6 * self.s)))
+        tk.Label(inner, text=title, bg=TILE, fg=FG, font=theme.font(11, "bold")).pack(anchor="w", pady=(0, int(6 * self.s)))
         return inner
 
     def labeled(self, parent, text, var, lo, hi, unit=""):
