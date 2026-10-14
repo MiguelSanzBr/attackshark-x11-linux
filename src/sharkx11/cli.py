@@ -31,7 +31,7 @@ def parser():
     d.add_argument("--sleep", type=int, help="minutes to sleep, 1..60")
     d.add_argument("--deep-sleep", type=int, help="minutes to deep sleep, 1..60")
     d.add_argument("--debounce", type=int, help="button debounce in ms, 2..25")
-    d = sub.add_parser("button", help="remap a button: left right middle dpi forward back")
+    d = sub.add_parser("button", help="remap a button: left right middle forward back")
     d.add_argument("button", choices=list(config.BUTTONS))
     d.add_argument("action", help="an action (see 'x11ctl actions') or a shortcut such as key:ctrl+shift+s")
     sub.add_parser("buttons", help="show the button map").add_argument("--reset", action="store_true",

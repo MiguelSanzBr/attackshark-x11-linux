@@ -27,11 +27,11 @@ class FakeMouse:
         self.host.setblocking(False)
 
     def install(self, monkeypatch):
-        real_open = os.open
+        real_open, real_close = os.open, os.close        # device.os is the os module: keep the originals
         monkeypatch.setattr(discovery, "find_devices", lambda: iter([(self.path, self.pid)]))
         monkeypatch.setattr(device.os, "open",
                             lambda path, flags, *a: self.host.fileno() if path == self.path else real_open(path, flags, *a))
-        monkeypatch.setattr(device.os, "close", lambda fd: None if fd == self.host.fileno() else os.close(fd))
+        monkeypatch.setattr(device.os, "close", lambda fd: None if fd == self.host.fileno() else real_close(fd))
         monkeypatch.setattr(device.fcntl, "ioctl", self.ioctl)
         return self
 

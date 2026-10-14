@@ -127,8 +127,9 @@ def encode_polling(rate):
 
 
 # ------------------------------------------------------------------ 0x08 buttons
-# physical buttons -> slot (FUN_004a26c0 / ms_4_page.xml); slot 5 is the DPI button under the wheel
-BUTTONS = {"left": 0, "right": 1, "middle": 2, "dpi": 5, "forward": 6, "back": 7}
+# the five buttons the official X11 page lets you remap -> slot (ms_4_page.xml: keys 1, 2, 3, 7, 8 are visible).
+# The DPI button under the wheel is not remappable there, so it is left alone here too.
+BUTTONS = {"left": 0, "right": 1, "middle": 2, "forward": 6, "back": 7}
 SLOTS = 18
 WHEEL_UP, WHEEL_DOWN = 16, 17
 # action name -> 3 firmware bytes (table 0x4ec3b8)
