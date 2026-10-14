@@ -121,7 +121,7 @@ Read handshake `FUN_004a3f50(id, len, flag)`:
 Order used by the app (CONFIRMED):
 | step | request | flag | response use |
 |---|---|---|---|
-| 1 | 0x0b, len 8 | 0 | word = byte2<<8 \| byte3 → page+0x67634. byte2 must be 0x55, otherwise the app uses a legacy path (single GET of report 0x0a, 0x80 bytes). byte3 = firmware/protocol version? **GUESS** |
+| 1 | 0x0b, len 8 | 0 | word = byte2<<8 \| byte3 → page+0x67634. On the real X11 this reads `01 12` (see §8): it is not the model id. |
 | 2 | 0x06, len 9 | 1 | polling rate (byte3), §3.5 |
 | 3 | 0x05, len 15 | 1 | lighting + power + debounce, §3.6 (`FUN_004996e0`) |
 | 4 | 0x04, len 56 | 1 | DPI block, §3.4 (`FUN_004993c0`) |
@@ -303,3 +303,19 @@ report 0x0b byte3 (GUESS).
    descriptor says yes) and whether report-id-prefixed HIDIOCGFEATURE lengths match (len incl. id).
 5. Then one reversible write (e.g. polling rate) and watch for the `03 55 50 00` ACK and whether
    the setting survives a power cycle (flash persistence).
+
+---------------------------------------------------------------------------------------------------
+## 8. Live check on a real X11 (receiver 1d57:fa60, 2026-10-14)
+* Input `03 55 40 01 54` arrives every 2.0 s while the mouse is awake: model id 0x55, battery
+  heartbeat, v0 = 1 (not charging), v1 = 84 %. **CONFIRMED**
+* Report 0x0b reads `0b 08 01 12 00 00 00 00`: byte 2 is **0x01, not the model id** (§3.2 was wrong
+  there); the model only comes from the input reports. Bytes 2-3 are shown as version "1.12" (GUESS:
+  firmware). **CONFIRMED** values
+* The 0xA0 handshake answers `a0 01 00 ..` for 0x0b/0x06/0x05/0x04; byte 1 of every report = its
+  length; checksums of 0x04 (bytes 3..49 at 50-51) and 0x05 (bytes 3..10 at 11-12) match. **CONFIRMED**
+* Factory state read back: DPI 800/1600/2400/3200/5000/22000 (22000 = code 0x81 with both range
+  flags), stages 7-8 off with **code 0**, active stage 2, ripple control on, angle snap off; lighting
+  off, green, brightness 8, speed code 3, sleep 1, deep sleep 10, debounce 4; polling 1000 Hz.
+* Writes of 0x06, 0x04, 0x05 and 0x08 were each ACKed with `03 55 50 00` within ~10 ms, read back
+  as written, took effect (static red light; front side button sent Volume +) and **survived a
+  power cycle**: the mouse stores them itself. **CONFIRMED**

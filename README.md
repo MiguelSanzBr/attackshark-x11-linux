@@ -4,7 +4,11 @@ Open-source configurator for the **ATTACK SHARK X11** wireless mouse: a GUI (`x1
 tool (`x11ctl`). The official software only runs on Windows; this one talks to the mouse directly over
 `/dev/hidraw`, through the 2.4G receiver or the USB cable. Python standard library and Tk only, no daemon.
 
-![x11gui](docs/screenshots/dpi.png)
+![x11gui: DPI stages](docs/screenshots/dpi.png)
+
+| Buttons | Lighting |
+|---|---|
+| ![Buttons page](docs/screenshots/buttons.png) | ![Lighting page](docs/screenshots/light.png) |
 
 | What | GUI | CLI |
 |---|---|---|
@@ -82,6 +86,9 @@ The mouse cannot report its button map back, so (like the official app) the last
 ## Good to know
 
 * It's a beta. It only changes settings, never firmware. Make a backup first (`x11ctl backup file.json`).
+* Tested on an X11 through its 2.4G receiver: every setting above was written, confirmed by the mouse, read
+  back, seen working (light colour, remapped button) and kept after switching the mouse off and on. The USB
+  cable path follows the same protocol but was not tested yet.
 * The official app supports 18 ATTACK SHARK models behind the same receiver; this tool was written for and
   tested on the X11 (model id 0x55). Other models are detected and named, but their settings layouts were
   not checked.

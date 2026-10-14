@@ -92,15 +92,15 @@ class DeviceSync:
         def done(r):
             model, version, dpi, light, polling, battery, link = r
             self.model, self.link = model, _(self.LINKS[link])
-            self.version = f"{version:#04x}"
-            self.battery = battery
+            self.version = version
+            self.battery, self.last_seen = battery, time.time()     # it just answered: online
             self.dpi, self.light = config.decode_dpi(dpi), config.decode_light(light)
             self.polling = config.decode_polling(polling)["rate"] or 1000
             self.buttons = state.load_buttons()
             self.dirty.clear()
             self.load()
             self.set_connected(self.conn())
-            name = p.MODELS.get(model, f"{model:#04x}")
+            name = p.MODELS.get(model, "?" if model is None else f"{model:#04x}")
             self.title_label.configure(text=f"ATTACK SHARK {name}")
             note = "" if model == p.MODEL_X11 else "  " + _("(modelo não testado: só o X11 foi verificado)")
             self.set_status(_("Configuração lida do mouse ({}). As mudanças são salvas automaticamente.").format(self.link)

@@ -21,7 +21,7 @@ def test_read_identify_and_events(fake):
     assert d.path == fake.path and d.pid == p.PID_RECEIVER
     fake.event(p.EV_BATTERY, 3, 87)
     fake._dev.send(bytes([0x02, 0xE9, 0x00]))               # a consumer-key report is not an event
-    assert d.identify() == (0x55, 0x12) and d.battery == (True, 87)
+    assert d.identify() == (0x55, "1.12") and d.battery == (False, 84)       # the read's heartbeat is newer
     assert config.decode_dpi(d.read(p.DPI))["active"] == 2
     assert fake.log[-1] == p.read_request(p.DPI)
     fake.refuse_reads = 1                                     # first handshake refused, second accepted
@@ -30,6 +30,12 @@ def test_read_identify_and_events(fake):
     with pytest.raises(IOError, match="0x06"):
         d.read(p.POLLING)
     d.close()
+
+
+def test_identify_without_events(fake):
+    fake.heartbeat = None
+    d = device.Device()
+    assert d.identify(timeout=0.05) == (None, "1.12")
 
 
 def test_read_checks_the_answer(fake):

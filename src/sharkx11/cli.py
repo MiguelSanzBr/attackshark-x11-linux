@@ -98,7 +98,8 @@ def run(dev, a):
     if a.cmd == "info":
         model, version = dev.identify()
         print(f"device      {dev.path} ({p.VID:04x}:{dev.pid:04x} {p.PIDS[dev.pid]})")
-        print(f"model       {p.MODELS.get(model, '?')} (id 0x{model:02x}), version byte 0x{version:02x}")
+        print("model       " + ("unknown (no event from the mouse: is it asleep?)" if model is None else
+                                 f"{p.MODELS.get(model, '?')} (id 0x{model:02x})") + f", version {version}")
         bat = dev.wait_battery()
         print("battery     " + ("unknown (move the mouse)" if bat is None else
                                 f"{bat[1]}%{' (charging)' if bat[0] else ''}"))

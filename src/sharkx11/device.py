@@ -92,11 +92,13 @@ class Device:
                     return
         raise IOError(f"no confirmation for report {data[0]:#04x} (is the mouse on?)")
 
-    def identify(self):
-        """``(model id, version byte)`` from report 0x0B."""
+    def identify(self, timeout=3.0):
+        """``(model id, version)``: the model from the mouse's events (it sends a heartbeat every 2 s; ``None``
+        if none arrives), the version from bytes 2-3 of report 0x0B (``01 12`` on the X11 -> "1.12")."""
         r = self.read(p.IDENT)
-        self.model = r[2]
-        return r[2], r[3]
+        if self.model is None:
+            next(self.events(timeout), None)          # any event names the model
+        return self.model, f"{r[2]:x}.{r[3]:02x}"
 
     def wait_battery(self, timeout=6.0):
         """The battery state, waiting for the mouse's heartbeat if none was seen yet."""

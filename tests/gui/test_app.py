@@ -25,18 +25,24 @@ def test_read_shows_everything(app, fake):
     assert app.stage_value[5].cget("text") == "22000 DPI" and app.v["polling"].get() == 1000
     assert app.v["mode"].get() == "off" and app.v["deep_sleep"].get() == 10
     assert app.v["actions"]["forward"].get() == "forward" and not app.dirty
-    assert badge(app) == ("0x12", False, None)
+    assert badge(app) == ("1.12", False, "84%")
     assert app.canvas.itemcget(app.parts["led"], "fill") == "#00ff00"          # active stage colour
     assert "Avançar" in texts(app.canvas)
 
 
-def test_read_other_model_and_battery(mk, fake):
-    fake.model = 0x07
-    fake.reports[p.IDENT] = bytes([p.IDENT, 8, 0x07, 0x01, 0, 0, 0, 0])
-    fake.event(p.EV_BATTERY, 3, 9)
+def test_read_other_model_and_battery(mk, fake, monkeypatch):
+    fake.model, fake.heartbeat = 0x07, (3, 9)
+    fake.reports[p.IDENT] = bytes([p.IDENT, 8, 0x02, 0x01, 0, 0, 0, 0])
     a = mk()
     assert a.title_label.cget("text") == "ATTACK SHARK X11SE" and "não testado" in a.status.cget("text")
-    assert badge(a) == ("0x01", False, "9% ⚡")
+    assert badge(a) == ("2.01", False, "9% ⚡")
+    fake.model, fake.heartbeat = 0x99, None                    # unknown id / no event at all
+    monkeypatch.setattr(device.Device, "identify", lambda self: (None, "1.12"))
+    a = mk()
+    assert a.title_label.cget("text") == "ATTACK SHARK ?"
+    monkeypatch.setattr(device.Device, "identify", lambda self: (0x99, "1.12"))
+    a = mk()
+    assert a.title_label.cget("text") == "ATTACK SHARK 0x99"
     fake.reports[p.POLLING] = bytes([6, 9, 1, 0x10, 0xEF, 0, 0, 0, 0])        # unknown code: shown as 1000
     a = mk()
     assert a.polling == 1000
@@ -216,6 +222,14 @@ def test_autosave_error_keeps_the_change(app, fake, dlg):
 
 
 # ---------------------------------------------------------------- live events
+def test_online_right_after_a_read(app, fake):
+    fake.heartbeat = None                                      # the next poll hears nothing yet
+    app.poll()
+    pump(app)
+    assert not badge(app)[1]                                   # it answered the read a moment ago
+    clear_timers(app)
+
+
 def test_poll_follows_the_mouse(app, fake):
     fake.event(p.EV_BATTERY, 1, 64)
     fake.event(p.EV_DPI, 5)

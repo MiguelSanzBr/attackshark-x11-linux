@@ -18,7 +18,7 @@ def test_list_and_actions(fake, capsys):
 
 
 def test_info(fake, capsys):
-    fake.event(p.EV_BATTERY, 3, 77)
+    fake.heartbeat = (3, 77)
     cli.main(["info"])
     out = capsys.readouterr().out
     assert "X11 (id 0x55)" in out and "77% (charging)" in out and "*1600" in out and "1000 Hz" in out

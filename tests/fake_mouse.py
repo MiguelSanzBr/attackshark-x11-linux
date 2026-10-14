@@ -15,7 +15,7 @@ class FakeMouse:
         self.path = "/dev/hidraw-fake"
         dpi = config.encode_dpi(config.default_dpi())
         light = config.encode_light(config.default_light())
-        self.reports = {p.IDENT: bytes([p.IDENT, 8, model, 0x12, 0, 0, 0, 0]), p.DPI: dpi, p.LIGHT: light,
+        self.reports = {p.IDENT: bytes([p.IDENT, 8, 0x01, 0x12, 0, 0, 0, 0]), p.DPI: dpi, p.LIGHT: light,
                         p.POLLING: config.encode_polling(1000)}
         self.buttons = None            # last button map written
         self.pending = None            # report asked for with 0xA0
@@ -23,6 +23,8 @@ class FakeMouse:
         self.silent = False            # never ACK writes
         self.status = 0                # ACK status byte
         self.refuse_reads = 0          # answer the next N read requests with 0xA0 byte1 = 0
+        self.heartbeat = (1, 84)       # battery heartbeat sent with each read request (the X11 sends one every
+                                       # 2 s); None = silent mouse
         self.host, self._dev = socket.socketpair(socket.AF_UNIX, socket.SOCK_SEQPACKET)
         self.host.setblocking(False)
 
@@ -51,6 +53,8 @@ class FakeMouse:
             self.log.append(data)
             if data[0] == p.READ_REQ:
                 self.pending = data[1]
+                if self.heartbeat:
+                    self.event(p.EV_BATTERY, *self.heartbeat)
                 return 0
             if data[0] == p.BUTTONS:
                 self.buttons = data

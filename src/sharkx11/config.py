@@ -29,6 +29,7 @@ def _check(raw, rid, csum_at=None):
 
 # ------------------------------------------------------------------ 0x04 DPI stages, angle snap, ripple
 DPI_CSUM = 50
+UNSET_DPI = 800
 
 
 def default_dpi():
@@ -48,9 +49,11 @@ def decode_dpi(raw):
     _check(raw, p.DPI, DPI_CSUM)
     stages = []
     for i in range(STAGES):
-        n = p.decode_step(raw[8 + i], raw[16 + i], raw[6] >> i & 1)
+        code = (raw[8 + i], raw[16 + i], raw[6] >> i & 1)
+        # a stage the mouse never had set holds code 0: show the app's default instead of 50 DPI
+        dpi = p.step_to_dpi(p.decode_step(*code)) if code[0] else UNSET_DPI
         r, g, b = raw[25 + 3 * i:28 + 3 * i]
-        stages.append(dict(dpi=p.step_to_dpi(n), on=bool(raw[5] >> i & 1), color=f"#{r:02x}{g:02x}{b:02x}"))
+        stages.append(dict(dpi=dpi, on=bool(raw[5] >> i & 1), color=f"#{r:02x}{g:02x}{b:02x}", read=(dpi, code)))
     return dict(raw=bytes(raw), angle_snap=bool(raw[3]), ripple=bool(raw[4]), stages=stages,
                 active=min(max(raw[24], 1), STAGES))
 
@@ -62,7 +65,12 @@ def encode_dpi(doc):
     b[3], b[4] = int(doc["angle_snap"]), int(doc["ripple"])
     b[5] = b[6] = 0
     for i, s in enumerate(doc["stages"]):
-        code, low, high = p.encode_step(p.dpi_to_step(s["dpi"]))
+        read_dpi, read_code = s.get("read", (None, None))
+        # an untouched stage goes back exactly as read (unless it is switched on while still unset)
+        if read_dpi == s["dpi"] and (read_code[0] or not s["on"]):
+            code, low, high = read_code
+        else:
+            code, low, high = p.encode_step(p.dpi_to_step(s["dpi"]))
         b[5] |= int(s["on"]) << i
         b[6] |= high << i
         b[8 + i], b[16 + i] = code, low
