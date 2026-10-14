@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=ATTACK SHARK X11
+GenericName=Mouse configurator
+Comment=Configure the ATTACK SHARK X11 wireless mouse
+Comment[pt_BR]=Configure o mouse sem fio ATTACK SHARK X11
+Exec=x11gui
+Icon=sharkx11
+Terminal=false
+Categories=Settings;HardwareSettings;
+Keywords=attack shark;mouse;dpi;polling;x11;
