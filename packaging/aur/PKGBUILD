@@ -1,7 +1,7 @@
 # Maintainer: Miguel Sanz <123277580+MiguelSanzBr@users.noreply.github.com>
 pkgname=attackshark-x11
-_tag=0.1.0-beta.1
-pkgver=0.1.0beta1
+_tag=0.1.0-beta.2
+pkgver=0.1.0beta2
 pkgrel=1
 pkgdesc="Open-source Linux configurator for the ATTACK SHARK X11 wireless mouse (CLI + GUI)"
 arch=('any')
@@ -11,7 +11,7 @@ depends=('python' 'tk' 'hicolor-icon-theme')   # tk: the GUI (tkinter)
 makedepends=('python-build' 'python-installer' 'python-setuptools' 'python-wheel')
 install=attackshark-x11.install
 source=("$pkgname-$_tag.tar.gz::$url/archive/refs/tags/v$_tag.tar.gz")
-sha256sums=('e2881e8890ac7db2bd074a3a5c136fa8b9556a9f6574bc8cb13602c16828ab12')
+sha256sums=('04a6fa5c76201bab3b3690d3901a2bccde05075a74b980246eec8eb51679344f')
 
 build() {
   cd "attackshark-x11-linux-$_tag"
