@@ -34,7 +34,7 @@ Download `sharkx11_<version>_all.deb` from the
 [Releases page](https://github.com/MiguelSanzBr/attackshark-x11-linux/releases), then:
 
 ```bash
-sudo apt install ./sharkx11_0.1.0-beta1_all.deb
+sudo apt install ./sharkx11_0.1.0-beta2_all.deb
 ```
 
 It installs `x11ctl`, `x11gui`, the menu entry "ATTACK SHARK X11" and the udev rule. Replug the receiver

@@ -4,6 +4,8 @@ This project follows [Semantic Versioning](https://semver.org/).
 
 ## Unreleased
 
+## 0.1.0-beta.2 — 2026-10-14
+
 * The drawing lights up each button while it is pressed on the mouse, with a short fade after release; the
   wheel flashes when it scrolls and the DPI button when it changes the stage (which also updates the DPI tab).
   The clicks are read from the receiver's mouse interface (read-only, alongside the system); a button lights
