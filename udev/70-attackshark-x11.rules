@@ -1,0 +1,5 @@
+# ATTACK SHARK X11: give the logged-in user access to the configuration interface (hidraw) of the
+# 2.4G receiver (1d57:fa60) and of the mouse on its USB cable (1d57:fa55).
+# Named 70-* so it runs before systemd's 73-seat-late.rules, which turns the uaccess tag into an ACL.
+SUBSYSTEM=="hidraw", ATTRS{idVendor}=="1d57", ATTRS{idProduct}=="fa60", TAG+="uaccess"
+SUBSYSTEM=="hidraw", ATTRS{idVendor}=="1d57", ATTRS{idProduct}=="fa55", TAG+="uaccess"
