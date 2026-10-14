@@ -1,0 +1,7 @@
+post_install() {
+  echo "Replug the receiver (or run: udevadm trigger) so the udev rule gives you access to the mouse."
+}
+
+post_upgrade() {
+  post_install
+}

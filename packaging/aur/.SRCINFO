@@ -1,0 +1,19 @@
+pkgbase = attackshark-x11
+	pkgdesc = Open-source Linux configurator for the ATTACK SHARK X11 wireless mouse (CLI + GUI)
+	pkgver = 0.1.0beta1
+	pkgrel = 1
+	url = https://github.com/MiguelSanzBr/attackshark-x11-linux
+	install = attackshark-x11.install
+	arch = any
+	license = MIT
+	makedepends = python-build
+	makedepends = python-installer
+	makedepends = python-setuptools
+	makedepends = python-wheel
+	depends = python
+	depends = tk
+	depends = hicolor-icon-theme
+	source = attackshark-x11-0.1.0-beta.1.tar.gz::https://github.com/MiguelSanzBr/attackshark-x11-linux/archive/refs/tags/v0.1.0-beta.1.tar.gz
+	sha256sums = e2881e8890ac7db2bd074a3a5c136fa8b9556a9f6574bc8cb13602c16828ab12
+
+pkgname = attackshark-x11
