@@ -43,6 +43,6 @@ def draw(c, s, ox, line, sel_line, fill, on_click):
         items[name] = item
     for y in range(32, 100, 9):                               # wheel grip
         c.create_line(P(92, y, 111, y), fill=sel_line, width=max(1, round(s)))
-    rounded(c, *P(*DPI_BUTTON), 5 * s, fill=fill, outline=line, width=w)
+    items["dpi"] = rounded(c, *P(*DPI_BUTTON), 5 * s, fill=fill, outline=line, width=w)
     items["led"] = rounded(c, *P(*LED), 2 * s, fill=line, outline="")
     return items

@@ -320,6 +320,7 @@ def test_main_restarts_until_closed(monkeypatch):
 
 def test_real_startup_in_english(monkeypatch, fake, settings_file):
     app_mod.save_settings({"lang": "en"})
+    monkeypatch.setattr(app_mod.App, "_live_loop", lambda self: None)    # the emulator has a single fd
     monkeypatch.setattr(tk, "_default_root", None)
     monkeypatch.setattr(theme, "FAMILY", theme.FAMILY)
     a = app_mod.App()

@@ -30,3 +30,17 @@ def find_devices():
                 SETTINGS_COLLECTION in _read(d + "/device/report_descriptor"):
             found.append((DEV + "/" + os.path.basename(d), pid))
     yield from sorted(found, key=lambda f: f[1] != protocol.PID_RECEIVER)
+
+
+MOUSE_COLLECTION = b"\x09\x02\xa1\x01"          # usage Mouse: the interface whose reports carry the clicks
+
+
+def find_mouse_node(settings_path):
+    """The ``hidraw`` node with the mouse reports of the same USB device as ``settings_path``, or ``None``."""
+    real = os.path.realpath(f"{SYS}/class/hidraw/{os.path.basename(settings_path)}/device")
+    usb_dir = os.path.dirname(os.path.dirname(real))           # .../3-1/3-1:1.2/0003:... -> .../3-1
+    for d in sorted(glob.glob(SYS + "/class/hidraw/hidraw*")):
+        if os.path.realpath(d + "/device").startswith(usb_dir + "/") and \
+                MOUSE_COLLECTION in _read(d + "/device/report_descriptor"):
+            return DEV + "/" + os.path.basename(d)
+    return None

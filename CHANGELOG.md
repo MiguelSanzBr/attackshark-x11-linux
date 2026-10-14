@@ -4,6 +4,11 @@ This project follows [Semantic Versioning](https://semver.org/).
 
 ## Unreleased
 
+* The drawing lights up each button while it is pressed on the mouse, with a short fade after release; the
+  wheel flashes when it scrolls and the DPI button when it changes the stage (which also updates the DPI tab).
+  The clicks are read from the receiver's mouse interface (read-only, alongside the system); a button lights
+  when the function it is mapped to arrives, media keys included.
+
 ## 0.1.0-beta.1 — 2026-10-14
 
 * First version: `x11ctl` (command line) and `x11gui` (Tk interface) for the ATTACK SHARK X11, through its

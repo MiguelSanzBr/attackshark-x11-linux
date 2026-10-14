@@ -56,6 +56,11 @@ def clear_timers(a):
     a._save_job = a._retry_job = None
 
 
+def no_thread(*a, **kw):
+    """Stand-in for threading.Thread that never runs its target."""
+    return SimpleNamespace(start=lambda: None)
+
+
 def badge(app):
     """``(version text or None, red X shown, battery text or None)``."""
     c = app.badge
@@ -94,6 +99,7 @@ def dlg(monkeypatch):
     monkeypatch.setattr(theme, "POLL_MS", 10 ** 7)
     monkeypatch.setattr(theme, "RETRY_MS", 10 ** 7)
     monkeypatch.setattr(theme, "LISTEN_S", 0.05)
+    monkeypatch.setattr(theme, "FRAME_MS", 10 ** 7)
     return d
 
 
@@ -105,6 +111,8 @@ def shared_app():
             raise AssertionError("real device access")
         mp.setattr(device, "Device", boom)
         mp.setattr(theme, "POLL_MS", 10 ** 7)
+        mp.setattr(theme, "FRAME_MS", 10 ** 7)
+        mp.setattr(app_mod.threading, "Thread", no_thread)        # no live reader: tests drive it directly
         a = app_mod.App()
     a.withdraw()
     a.tk.willdispatch()             # worker threads call app.after without a running mainloop()
@@ -124,6 +132,7 @@ def mk(shared_app, fake):
         a.dpi = a.light = a.buttons = a.battery = None
         a.dirty.clear()
         a.sel_part = "left"
+        a.pressed, a.press_t, a.out_mask, a.out_usage = set(), {}, 0, 0
         a.show("dpi")
         if read:
             a.read_device()

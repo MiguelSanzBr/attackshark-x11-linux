@@ -17,3 +17,9 @@ def hex_to_hsv(c):
 
 def hsv_to_hex(h, s, v):
     return "#" + "".join(f"{round(x * 255):02x}" for x in colorsys.hsv_to_rgb(h, s, v))
+
+
+def mix(a, b, t):
+    """Blend two ``#rrggbb`` colours (t=0 -> a, t=1 -> b)."""
+    ca, cb = (int(a[i:i + 2], 16) for i in (1, 3, 5)), (int(b[i:i + 2], 16) for i in (1, 3, 5))
+    return "#" + "".join(f"{round(x + (y - x) * t):02x}" for x, y in zip(ca, cb))

@@ -22,3 +22,24 @@ def test_find_devices(tmp_path, monkeypatch):
     make(tmp_path, "hidraw5", "garbage", b"")
     os.makedirs(tmp_path / "sys/class/hidraw/hidraw6")                          # no device dir at all
     assert list(discovery.find_devices()) == [("/dev/hidraw3", p.PID_RECEIVER), ("/dev/hidraw1", p.PID_WIRED)]
+
+
+def test_find_mouse_node(tmp_path, monkeypatch):
+    monkeypatch.setattr(discovery, "SYS", str(tmp_path / "sys"))
+    usb = tmp_path / "devices/3-1"
+    for iface, name, desc in (("3-1:1.1", "hidraw4", bytes.fromhex("05 01 09 02 a1 01 09 01")),
+                              ("3-1:1.2", "hidraw5", DESC_SETTINGS)):
+        dev = usb / iface / "0003:1D57:FA60.0001"
+        dev.mkdir(parents=True)
+        (dev / "report_descriptor").write_bytes(desc)
+        link = tmp_path / "sys/class/hidraw" / name
+        link.mkdir(parents=True)
+        os.symlink(dev, link / "device")
+    other = tmp_path / "devices/1-1/1-1:1.0/x"
+    other.mkdir(parents=True)
+    (other / "report_descriptor").write_bytes(bytes.fromhex("05 01 09 02 a1 01"))
+    (tmp_path / "sys/class/hidraw/hidraw9").mkdir()
+    os.symlink(other, tmp_path / "sys/class/hidraw/hidraw9/device")
+    assert discovery.find_mouse_node("/dev/hidraw5") == "/dev/hidraw4"
+    (usb / "3-1:1.1/0003:1D57:FA60.0001/report_descriptor").write_bytes(b"\x05\x01\x09\x06")
+    assert discovery.find_mouse_node("/dev/hidraw5") is None

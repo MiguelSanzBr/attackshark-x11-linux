@@ -1,6 +1,7 @@
 """The ``x11gui`` main window: the mouse drawing with callouts on the left, settings tabs on the right."""
 import json
 import os
+import threading
 import tkinter as tk
 import tkinter.font as tkfont
 
@@ -8,6 +9,7 @@ from .. import config, protocol as p
 from . import i18n, mouse, theme
 from .drawing import rounded
 from .i18n import LANGS, _
+from .live import LiveInput
 from .sync import DeviceSync
 from .theme import ACCENT, BG, FG, LINE, LINE_FG, MUTED, TILE, TILE_HI
 from .widgets import ColorPicker, Pill, Select, Slider, Toggle, field, panel
@@ -54,7 +56,7 @@ def action_label(act):
     return _("Atalho: {}").format(config.shortcut_text(act)) if isinstance(act, tuple) else _(ACTION_NAMES[act])
 
 
-class App(DeviceSync, tk.Tk):
+class App(LiveInput, DeviceSync, tk.Tk):
     LINKS = LINKS
     def __init__(self):
         super().__init__()
@@ -70,14 +72,18 @@ class App(DeviceSync, tk.Tk):
         self.dirty, self.busy, self._loading = set(), False, False
         self._save_job = self._retry_job = None
         self.last_seen, self.sel_part, self.edit_stage, self.tab = 0.0, "left", 0, "dpi"
+        self.pressed, self.press_t, self.out_mask, self.out_usage, self._closing = set(), {}, 0, 0, False
         self._vars()
         self._build()
         w, h = int(1180 * self.s), int(860 * self.s)
         self.geometry(f"{min(w, int(self.winfo_screenwidth() * .95))}x{min(h, int(self.winfo_screenheight() * .9))}")
         self.after(200, self.read_device)
         self.after(theme.POLL_MS, self.poll)
+        self.after(theme.FRAME_MS, self.animate)
+        threading.Thread(target=self._live_loop, daemon=True).start()
 
     def destroy(self):
+        self._closing = True
         for job in self.tk.splitlist(self.tk.call("after", "info")):   # timers would outlive the window
             self.after_cancel(job)
         super().destroy()
