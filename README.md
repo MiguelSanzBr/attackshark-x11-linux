@@ -42,7 +42,7 @@ afterwards.
 
 ### Flatpak
 
-Submitted to Flathub as `io.github.miguelsanzbr.attackshark-x11-linux` (waiting for review). The sandbox reaches the device through its hidraw node, so
+App ID `io.github.miguelsanzbr.attackshark-x11-linux` (not on Flathub yet). Inside the sandbox the app reaches the device through its hidraw node, so
 the udev rule is still installed once on the host, from a clone of this repository:
 
 ```bash
