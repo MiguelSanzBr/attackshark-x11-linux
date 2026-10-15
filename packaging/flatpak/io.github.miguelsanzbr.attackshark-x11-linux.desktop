@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=Shark Mouse Config
+Comment=Configure the ATTACK SHARK X11 wireless mouse
+Exec=x11gui
+Icon=io.github.miguelsanzbr.attackshark-x11-linux
+Terminal=false
+Categories=Settings;HardwareSettings;
+Keywords=attack shark;mouse;dpi;polling;rgb;
+StartupNotify=true

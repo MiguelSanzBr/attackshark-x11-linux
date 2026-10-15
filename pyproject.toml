@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "sharkx11"
-version = "0.1.0b2"
+version = "0.1.0b3"
 description = "Open-source Linux configurator for the ATTACK SHARK X11 wireless mouse (CLI + GUI)"
 readme = "README.md"
 license = { text = "MIT" }

@@ -40,6 +40,17 @@ sudo apt install ./sharkx11_0.1.0-beta2_all.deb
 It installs `x11ctl`, `x11gui`, the menu entry "ATTACK SHARK X11" and the udev rule. Replug the receiver
 afterwards.
 
+### Flatpak
+
+App ID `io.github.miguelsanzbr.attackshark-x11-linux` (not on Flathub yet). Inside the sandbox the app reaches the device through its hidraw node, so
+the udev rule is still installed once on the host, from a clone of this repository:
+
+```bash
+sudo install -m644 udev/70-attackshark-x11.rules /etc/udev/rules.d/ && sudo udevadm control --reload && sudo udevadm trigger --action=add --subsystem-match=hidraw
+```
+
+The AppStream metadata, desktop entry and icon for Flatpak are in `packaging/flatpak/`.
+
 ### From source
 
 Requirements: Python ≥ 3.8 and Tk (`python3-tk` on Debian/Ubuntu).
