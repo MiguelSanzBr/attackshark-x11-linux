@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2026 Miguel Sanz -->
+<component type="desktop-application">
+  <id>io.github.miguelsanzbr.attackshark-x11-linux</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>MIT</project_license>
+  <name>Shark Mouse Config</name>
+  <summary>Configure the ATTACK SHARK X11 wireless mouse</summary>
+  <developer id="io.github.miguelsanzbr">
+    <name>Miguel Sanz</name>
+  </developer>
+  <description>
+    <p>Shark Mouse Config sets up the ATTACK SHARK X11 wireless mouse on Linux, without the vendor's Windows software. It talks to the mouse directly, through the 2.4G receiver or the USB cable, and saves every change on the mouse itself.</p>
+    <ul>
+      <li>Up to eight DPI stages (50 to 22000), with a colour per stage</li>
+      <li>Polling rate, angle snap, ripple control and button response time</li>
+      <li>Remapping of the five buttons: mouse functions, DPI, media keys and keyboard shortcuts</li>
+      <li>Lighting: seven effects, colour, brightness and speed</li>
+      <li>Sleep and deep-sleep timers, battery level and charging state</li>
+      <li>The drawing lights up the buttons while they are pressed</li>
+      <li>Backup and restore in JSON, English and Brazilian Portuguese interface</li>
+    </ul>
+    <p>The device is reached through its hidraw node, which needs a udev rule installed once on the host system. The
+      project page explains it and ships an installer script.</p>
+    <p>This is an independent project, not affiliated with or endorsed by ATTACK SHARK. The protocol was
+      reverse-engineered for interoperability.</p>
+  </description>
+  <launchable type="desktop-id">io.github.miguelsanzbr.attackshark-x11-linux.desktop</launchable>
+  <provides>
+    <binary>x11gui</binary>
+    <binary>x11ctl</binary>
+  </provides>
+  <url type="homepage">https://github.com/MiguelSanzBr/attackshark-x11-linux</url>
+  <url type="bugtracker">https://github.com/MiguelSanzBr/attackshark-x11-linux/issues</url>
+  <url type="vcs-browser">https://github.com/MiguelSanzBr/attackshark-x11-linux</url>
+  <screenshots>
+    <screenshot type="default">
+      <image>https://raw.githubusercontent.com/MiguelSanzBr/attackshark-x11-linux/v0.1.0-beta.3/docs/screenshots/dpi.png</image>
+      <caption>DPI stages</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://raw.githubusercontent.com/MiguelSanzBr/attackshark-x11-linux/v0.1.0-beta.3/docs/screenshots/buttons.png</image>
+      <caption>Button remapping</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://raw.githubusercontent.com/MiguelSanzBr/attackshark-x11-linux/v0.1.0-beta.3/docs/screenshots/light.png</image>
+      <caption>Lighting</caption>
+    </screenshot>
+  </screenshots>
+  <content_rating type="oars-1.1"/>
+  <branding>
+    <color type="primary" scheme_preference="light">#b9ecc4</color>
+    <color type="primary" scheme_preference="dark">#123a1c</color>
+  </branding>
+  <supports>
+    <control>pointing</control>
+    <control>keyboard</control>
+  </supports>
+  <requires>
+    <display_length compare="ge">768</display_length>
+  </requires>
+  <keywords>
+    <keyword>attack shark</keyword>
+    <keyword>mouse</keyword>
+    <keyword>dpi</keyword>
+    <keyword>polling</keyword>
+    <keyword>rgb</keyword>
+  </keywords>
+  <categories>
+    <category>Settings</category>
+    <category>HardwareSettings</category>
+  </categories>
+  <releases>
+    <release version="0.1.0-beta.3" date="2026-10-15" type="development">
+      <description>
+        <p>Flatpak packaging and AppStream metadata.</p>
+      </description>
+    </release>
+    <release version="0.1.0-beta.2" date="2026-10-14" type="development">
+      <description>
+        <p>Buttons light up on the drawing while pressed.</p>
+      </description>
+    </release>
+    <release version="0.1.0-beta.1" date="2026-10-14" type="development">
+      <description>
+        <p>First version.</p>
+      </description>
+    </release>
+  </releases>
+</component>
