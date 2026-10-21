@@ -8,4 +8,4 @@
 * :mod:`sharkx11.gui`       — the ``x11gui`` Tk interface.
 """
 
-__version__ = "0.1.0b3"
+__version__ = "0.1.0b4"
