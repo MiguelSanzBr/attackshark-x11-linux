@@ -1,7 +1,9 @@
 """The ``x11gui`` main window: the mouse drawing with callouts on the left, settings tabs on the right."""
 import json
 import os
+import sys
 import threading
+import webbrowser
 import tkinter as tk
 import tkinter.font as tkfont
 
@@ -441,7 +443,16 @@ class App(LiveInput, DeviceSync, tk.Tk):
             self.after_idle(self.destroy)
 
 
-def main():
+WEB_URL = "https://miguelsanzbr.github.io/attackshark-x11-linux/"
+
+
+def main(argv=None):
+    args = sys.argv[1:] if argv is None else argv
+    if args[:1] == ["web"]:
+        # the web version (WebHID) is served by this repository's GitHub Pages
+        print(WEB_URL)
+        webbrowser.open(WEB_URL)
+        return
     while True:
         app = App()
         app.mainloop()

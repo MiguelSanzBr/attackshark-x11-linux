@@ -26,6 +26,10 @@ tool (`x11ctl`). The official software only runs on Windows; this one talks to t
 Changes are written as soon as you make them, and only after the mouse confirms each one. The tool only
 sends the settings reports the official app sends for the X11; it has no firmware-update code.
 
+## Web version
+
+The same configurator also runs in the browser, with nothing to install: <https://miguelsanzbr.github.io/attackshark-x11-linux/> (Chrome, Edge or another Chromium browser, because it talks to the device through WebHID). From the terminal, `x11gui web` opens it. Its source is in [`web/`](web/) (React + TypeScript); its tests run in `.github/workflows/web.yml` and the deploy in `.github/workflows/pages.yml`.
+
 ## Install
 
 ### Debian / Ubuntu (.deb)

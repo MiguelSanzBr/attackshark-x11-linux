@@ -366,3 +366,12 @@ def test_badge_states(app):
 def test_mouse_geometry():
     assert set(mouse.PARTS) == set(config.BUTTONS) and {c[0] for c in mouse.CALLOUTS} == set(config.BUTTONS)
     assert all(0 <= x <= mouse.WIDTH and 0 <= y <= mouse.HEIGHT for x, y in mouse.BODY)
+
+
+def test_main_web_opens_the_browser_instead_of_the_gui(monkeypatch, capsys):
+    opened = []
+    monkeypatch.setattr(app_mod.webbrowser, "open", opened.append)
+    monkeypatch.setattr(app_mod, "App", lambda: (_ for _ in ()).throw(AssertionError("GUI started")))
+    app_mod.main(["web"])
+    assert opened == [app_mod.WEB_URL]
+    assert app_mod.WEB_URL in capsys.readouterr().out

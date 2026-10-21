@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <!-- mesmo --bg do app.css; o ThemeToggle troca as duas quando a pessoa escolhe o tema -->
+    <meta name="theme-color" content="#f3f4f6" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#151515" media="(prefers-color-scheme: dark)" />
+    <title>ATTACK SHARK X11 no navegador</title>
+    <!-- aplica o tema salvo antes do React pra tela não piscar no tema errado -->
+    <script>
+      try {
+        const theme = localStorage.getItem('theme')
+        if (theme) {
+          document.documentElement.dataset.theme = theme
+          for (const m of document.querySelectorAll('meta[name="theme-color"]')) m.content = theme === 'dark' ? '#151515' : '#f3f4f6'
+        }
+      } catch {}
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
